@@ -24,12 +24,6 @@ mongoose
     console.log("Connected to MongoDB");
 
     const conn = mongoose.connection;
-    conn.once("open", () => {
-      gfsBucket = new mongoose.mongo.GridFSBucket(conn.db, {
-        bucketName: "fs", // Default bucket name
-      });
-      console.log("GridFSBucket initialized");
-    });
     gfsBucket = new mongoose.mongo.GridFSBucket(conn.db, {
       bucketName: "fs", // Default bucket name
     });
