@@ -3,6 +3,16 @@ from datetime import datetime, timedelta
 import time
 from bs4 import BeautifulSoup
 from gtts import gTTS
+import os
+from dotenv import load_dotenv
+from pymongo import MongoClient
+from gridfs import GridFS
+
+load_dotenv()
+
+MONGODB_URL = os.getenv("MONGODB_URL")
+DB_NAME = "Hackernews"
+COLLECTION_NAME = "posts"
 
 class HackerNewsFetcher:
     BASE_URL = "https://hacker-news.firebaseio.com/v0"
@@ -60,6 +70,34 @@ def scrape_article_content(url):
     except Exception as e:
         print(f"Failed to scrape {url} : {e}")
         return None
+
+def store_in_mongodb(post_details, mp3_file_path):
+    print("Storing in mongodb")
+    client = MongoClient(MONGODB_URL)
+    db = client[DB_NAME]
+    fs = GridFS(db)
+    collection = db[COLLECTION_NAME]
+
+    try:
+        with open(mp3_file_path, "rb") as mp3_file:
+            mp3_data = mp3_file.read()
+            mp3_id = fs.put(mp3_data, filename=os.path.basename(mp3_file_path))
+
+        document = {
+            "title": post_details["title"],
+            "url": post_details.get("url", None),
+            "content": post_details.get("content", None),
+            "audio_file_id": mp3_id,  # Reference to GridFS file
+            "created_at": datetime.now()
+        }
+
+        collection.insert_one(document)
+        print(f"Stored in MongoDB: {post_details['title']}")
+    except Exception as e:
+        print(f"Failed to store in MongoDB: {e}")
+    finally:
+        client.close()
+
 def text_to_speech(text, filename):
     tts = gTTS(text)
     tts.save(filename)
@@ -71,9 +109,22 @@ def main():
     print(len(recent_stories))
     details = []
     for story in recent_stories:
+        print(f"Processing story: {story['title']}")
         content = scrape_article_content(story["url"])
-        title = story["title"] + ".mp3"
-        text_to_speech(content, story["title"])
+        if not content: 
+            print(f"Skipping story due to missing content {story['title']}")
+            continue
+
+        audio_filename = f"{story['title'].replace(' ', '_')}.mp3"
+        text_to_speech(content, audio_filename)
+
+        post_details = {
+            "title": story["title"],
+            "url": story["url"],
+            "content": content
+        }
+
+        store_in_mongodb(post_details, audio_filename)
     
 if __name__ == "__main__":
     main()
