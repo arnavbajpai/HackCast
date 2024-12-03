@@ -11,7 +11,7 @@ from gridfs import GridFS
 load_dotenv()
 
 MONGODB_URL = os.getenv("MONGODB_URL")
-DB_NAME = "Hackernews"
+DB_NAME = "test"
 COLLECTION_NAME = "posts"
 
 class HackerNewsFetcher:
@@ -39,6 +39,7 @@ class HackerNewsFetcher:
         return story_time >= seven_days_ago
 
     def fetch_recent_stories(self, limit=None, days=7):
+        print("Fetching recent stories")
         recent_stories = []
         story_ids = self.get_top_stories_ids()
 
@@ -59,6 +60,7 @@ class HackerNewsFetcher:
         return recent_stories
     
 def scrape_article_content(url):
+    print("Visting the articles")
     try:
         response = requests.get(url, timeout = 10)
         response.raise_for_status()
@@ -104,7 +106,7 @@ def text_to_speech(text, filename):
     
 def main():
     hn_fetcher = HackerNewsFetcher()
-    recent_stories = hn_fetcher.fetch_recent_stories(limit = 1)
+    recent_stories = hn_fetcher.fetch_recent_stories(limit = 10)
     print(recent_stories)
     print(len(recent_stories))
     details = []
