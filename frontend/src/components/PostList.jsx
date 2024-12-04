@@ -1,11 +1,13 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 import PostCard from "./PostCard";
 import Title from "./Title";
 
 const PostList = ({ posts }) => {
   return (
     <>
-      <Title />
+      <Center>
+        <Title />
+      </Center>
       <Box p={4}>
         {posts.map((post) => (
           <Box
