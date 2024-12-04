@@ -17,3 +17,8 @@ Need to find a better name man
 - [] Allow a summary of the articles instead of the entire article
 - [] Autoplay and stuff?
 - [] Improve the agent
+- [] Improve UI
+
+### Deployment
+
+- [] Create CRON JOB for agent
