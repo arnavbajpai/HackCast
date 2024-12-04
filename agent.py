@@ -127,6 +127,7 @@ def main():
         }
 
         store_in_mongodb(post_details, audio_filename)
+        os.remove(audio_filename)
     
 if __name__ == "__main__":
     main()
