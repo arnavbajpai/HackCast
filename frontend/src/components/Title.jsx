@@ -4,7 +4,7 @@ const Title = () => {
   return (
     <Center>
       <Heading as="h1" size="xl" mb={6}>
-        Hackernews-Podcasts
+        HackCast
       </Heading>
     </Center>
   );
