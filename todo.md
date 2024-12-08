@@ -14,8 +14,10 @@ Need to find a better name man
 ## Improvements (High to Low Priority)
 
 - [] Allow a summary of the articles instead of the entire article
-- [] Use chat-gpt whisper
-- [] Improve the agent such that it doesn't add duplicates
+- [] Use OPENAITTS
+  - [] Store uuid with the python script
+  - [] in the backend, when we receive a post request, download the MP3 file the store it in mongodb gridfs collection where the id is the UUID
+  - [] Do something similar in the python backend
 - [] Autoplay and stuff?
 - [] Improve UI (Least priority)
 

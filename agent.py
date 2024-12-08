@@ -14,6 +14,7 @@ from transformers import pipeline
 load_dotenv()
 
 MONGODB_URL = os.getenv("MONGODB_URL")
+TTS_KEY = os.getenv("TTS_KEY")
 DB_NAME = "test"
 COLLECTION_NAME = "posts"
 
@@ -76,22 +77,17 @@ def scrape_article_content(url):
         print(f"Failed to scrape {url} : {e}")
         return None
 
-def store_in_mongodb(post_details, mp3_file_path):
+def store_in_mongodb(post_details, uuid):
     print("Storing in mongodb")
     client = MongoClient(MONGODB_URL)
     db = client[DB_NAME]
-    fs = GridFS(db)
     collection = db[COLLECTION_NAME]
     try:
-        with open(mp3_file_path, "rb") as mp3_file:
-            mp3_data = mp3_file.read()
-            mp3_id = fs.put(mp3_data, filename=os.path.basename(mp3_file_path))
-
         document = {
             "title": post_details["title"],
             "url": post_details.get("url", None),
             "content": post_details.get("content", None),
-            "audio_file_id": mp3_id,  # Reference to GridFS file
+            "audio_file_id": uuid,  # Reference to GridFS file
             "created_at": post_details['time'],
             "author": post_details['by']
         }
@@ -104,10 +100,23 @@ def store_in_mongodb(post_details, mp3_file_path):
         client.close()
 
 def text_to_speech(text, filename):
-    voices = [streamlabs.Voice.Brian.value, streamlabs.Voice.Amy.value, streamlabs.Voice.Emma.value, streamlabs.Voice.Geraint.value, streamlabs.Voice.Russell.value, streamlabs.Voice.Nicole.value, streamlabs.Voice.Joey.value, streamlabs.Voice.Justin.value, streamlabs.Voice.Matthew.value, streamlabs.Voice.Ivy.value, streamlabs.Voice.Joanna.value, streamlabs.Voice.Kendra.value, streamlabs.Voice.Kimberly.value, streamlabs.Voice.Salli.value, streamlabs.Voice.Raveena.value]
-    data = streamlabs.requestTTS(text, random.choice(voices))
-    with open(filename, '+wb') as file:
-        file.write(data)
+    url = "https://api.ttsopenai.com/uapi/v1/text-to-speech"
+    Voices = ["0A005", "0A006", "0A003", "0A002"]
+    voice_id = random.choice(Voices)
+    headers = {
+        "Content-Type": "application/json",
+        "x-api-key": TTS_KEY
+    }
+
+    data = {
+        "model": "tts-1",
+        "voice_id": voice_id,
+        "speed": 1,
+        "input": text
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+    return response.json()['result']['uuid']
     
 
 def main():
@@ -129,16 +138,17 @@ def main():
             continue
 
         audio_filename = f"{story['title'].replace(' ', '_')}.mp3"
-        text_to_speech(content, audio_filename)
+        uuid = text_to_speech(content, audio_filename)
 
         post_details = {
             "title": story["title"],
             "url": story["url"],
-            "content": content
+            "content": content,
+            'by': story['by'],
         }
 
-        store_in_mongodb(post_details, audio_filename)
-        os.remove(audio_filename)
+        store_in_mongodb(post_details, uuid)
+        # os.remove(audio_filename)
     
 if __name__ == "__main__":
     main()
