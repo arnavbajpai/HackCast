@@ -11,14 +11,14 @@ Need to find a better name man
 - [x] Then we send all the posts along with their podcasts into a mongo db database
 - [x] The react application will then use this database to display the posts to the users.
 
-## Improvements
+## Improvements (High to Low Priority)
 
-- [] Use chat-gpt whisper
 - [] Allow a summary of the articles instead of the entire article
+- [] Use chat-gpt whisper
+- [] Improve the agent such that it doesn't add duplicates
 - [] Autoplay and stuff?
-- [] Improve the agent
-- [] Improve UI
+- [] Improve UI (Least priority)
 
 ### Deployment
 
-- [] Create CRON JOB for agent
+- [] Create CRON JOB for agent (After the agent has been perfected)

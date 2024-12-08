@@ -51,9 +51,11 @@ const Post = mongoose.model("Post", postSchema);
 
 // API to Fetch All Posts
 app.get("/posts", (req, res) => {
-  Post.find({}).then((posts) => {
-    res.json(posts);
-  });
+  Post.find({})
+    .sort({ created_at: -1 })
+    .then((posts) => {
+      res.json(posts);
+    });
 });
 
 // API to Fetch Audio File by ID

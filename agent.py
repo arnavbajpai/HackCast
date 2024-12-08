@@ -7,6 +7,9 @@ import os
 from dotenv import load_dotenv
 from pymongo import MongoClient
 from gridfs import GridFS
+from pyt2s.services import streamlabs
+import random
+from transformers import pipeline
 
 load_dotenv()
 
@@ -79,7 +82,6 @@ def store_in_mongodb(post_details, mp3_file_path):
     db = client[DB_NAME]
     fs = GridFS(db)
     collection = db[COLLECTION_NAME]
-
     try:
         with open(mp3_file_path, "rb") as mp3_file:
             mp3_data = mp3_file.read()
@@ -90,7 +92,8 @@ def store_in_mongodb(post_details, mp3_file_path):
             "url": post_details.get("url", None),
             "content": post_details.get("content", None),
             "audio_file_id": mp3_id,  # Reference to GridFS file
-            "created_at": datetime.now()
+            "created_at": post_details['time'],
+            "author": post_details['by']
         }
 
         collection.insert_one(document)
@@ -101,17 +104,25 @@ def store_in_mongodb(post_details, mp3_file_path):
         client.close()
 
 def text_to_speech(text, filename):
-    tts = gTTS(text)
-    tts.save(filename)
+    voices = [streamlabs.Voice.Brian.value, streamlabs.Voice.Amy.value, streamlabs.Voice.Emma.value, streamlabs.Voice.Geraint.value, streamlabs.Voice.Russell.value, streamlabs.Voice.Nicole.value, streamlabs.Voice.Joey.value, streamlabs.Voice.Justin.value, streamlabs.Voice.Matthew.value, streamlabs.Voice.Ivy.value, streamlabs.Voice.Joanna.value, streamlabs.Voice.Kendra.value, streamlabs.Voice.Kimberly.value, streamlabs.Voice.Salli.value, streamlabs.Voice.Raveena.value]
+    data = streamlabs.requestTTS(text, random.choice(voices))
+    with open(filename, '+wb') as file:
+        file.write(data)
     
+
 def main():
     hn_fetcher = HackerNewsFetcher()
-    recent_stories = hn_fetcher.fetch_recent_stories(limit = 10)
+    recent_stories = hn_fetcher.fetch_recent_stories(limit = 1)
     print(recent_stories)
     print(len(recent_stories))
     details = []
     for story in recent_stories:
         print(f"Processing story: {story['title']}")
+        print(story)
+        if not story['url']:
+            print("Skipping story due to missing url")
+            continue
+        
         content = scrape_article_content(story["url"])
         if not content: 
             print(f"Skipping story due to missing content {story['title']}")
@@ -131,3 +142,4 @@ def main():
     
 if __name__ == "__main__":
     main()
+    
