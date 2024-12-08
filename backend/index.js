@@ -82,7 +82,7 @@ app.post("/webhook", async (req, res) => {
 });
 
 app.get("/webhook", async (req, res) => {
-  response.send("<h1>All hail the WEBHOOK</h1>");
+  res.send("<h1>All hail the WEBHOOK</h1>");
 });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
