@@ -2,9 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const fs = require("fs");
-const { GridFsStorage } = require("multer-gridfs-storage");
-const multer = require("multer");
 
 dotenv.config();
 
