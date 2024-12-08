@@ -6,12 +6,15 @@ import { Text } from "@chakra-ui/react";
 
 const PostCard = ({ post }) => {
   console.log(post);
-  const timeAgo = formatDistanceToNow(new Date(post.created_at), {
+  const timeAgo = formatDistanceToNow(new Date(post.created_at * 1000), {
     addSuffix: true,
   });
   return (
     <>
       <PostTitle title={post.title} />
+      <Text color="gray.500" mb={2}>
+        Written by: {post.author}
+      </Text>
       <Text color="gray.500" mb={2}>
         {timeAgo}
       </Text>
