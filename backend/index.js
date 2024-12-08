@@ -78,11 +78,11 @@ app.get("/audio/:id", async (req, res) => {
 
 app.post("/webhook", async (req, res) => {
   console.log(req.body);
-  res.json(<p>{req.body}</p>);
+  res.send(`<p>${req.body}</p>`);
 });
 
 app.get("/webhook", async (req, res) => {
-  res.json(<h1>ALL HAIL THE WEBHOOK</h1>);
+  response.send("<h1>All hail the WEBHOOK</h1>");
 });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
