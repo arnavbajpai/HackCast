@@ -76,6 +76,11 @@ app.get("/audio/:id", async (req, res) => {
   }
 });
 
+app.post("/webhook", async (req, res) => {
+  console.log(req.body);
+  return <p>{req.body}</p>;
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
