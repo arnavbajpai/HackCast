@@ -10,10 +10,16 @@ from gridfs import GridFS
 from pyt2s.services import streamlabs
 import random
 from transformers import pipeline
+import warnings
+import nltk
+from joinery.op import JoinOp
+from joinery.api.openai import OpenAIApi
+warnings.filterwarnings("ignore", category=DeprecationWarning) 
 
 load_dotenv()
 
 MONGODB_URL = os.getenv("MONGODB_URL")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DB_NAME = "test"
 COLLECTION_NAME = "posts"
 
@@ -62,6 +68,15 @@ class HackerNewsFetcher:
 
         return recent_stories
     
+def summarize_content(text):
+    print("Summarizing...")
+    summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+    summary = summarizer(text, max_length=700, min_length=30, do_sample=False)
+    print("------------------------------------------------------------")
+    print(summary)
+    print("------------------------------------------------------------")
+    return summary[0]['summary_text']
+
 def scrape_article_content(url):
     print("Visting the articles")
     try:
@@ -71,6 +86,9 @@ def scrape_article_content(url):
 
         paragraphs = soup.find_all("p")
         content = " ".join([p.get_text(strip=True) for p in paragraphs])
+        print("-------------------------------------------------------------------")
+        print(len(content))
+        print("-------------------------------------------------------------------")
         return content
     except Exception as e:
         print(f"Failed to scrape {url} : {e}")
@@ -104,14 +122,22 @@ def store_in_mongodb(post_details, mp3_file_path):
         client.close()
 
 def text_to_speech(text, filename):
-    print("Generating speech...")
-    tts = gTTS(text)
-    tts.save(filename)
-    
+    print("Converting to speech...")
+    voices = ["echo", "fable", "shimmer", "onyx"]
+    tts = JoinOp(
+        text=text,
+        api=OpenAIApi(
+            model='tts-1-hd',
+            voice=random.choice(voices),
+            api_key=OPENAI_API_KEY,
+        ),
+    )
+
+    tts.process_to_file(filename)
 
 def main():
     hn_fetcher = HackerNewsFetcher()
-    recent_stories = hn_fetcher.fetch_recent_stories(limit = 10)
+    recent_stories = hn_fetcher.fetch_recent_stories(limit = 20)
     print(recent_stories)
     print(len(recent_stories))
     details = []
