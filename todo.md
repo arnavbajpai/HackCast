@@ -19,3 +19,7 @@ Need to find a better name man
 ### Deployment
 
 - [] Create CRON JOB for agent (After the agent has been perfected)
+  // Hover text
+  // What the app does
+  // Feature cards
+  // Testimonials (infinite moving cards)
