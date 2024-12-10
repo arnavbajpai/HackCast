@@ -3,9 +3,9 @@ import { Heading, Center } from "@chakra-ui/react";
 const Title = () => {
   return (
     <Center>
-      <Heading as="h1" size="xl" mb={6}>
+      <h1 class="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-center">
         HackCast
-      </Heading>
+      </h1>
     </Center>
   );
 };

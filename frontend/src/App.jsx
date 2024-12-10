@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PostList from "./components/PostList";
 import { Spinner, Center, VStack, Text } from "@chakra-ui/react";
+import "./globals.css";
 
 // export const BASEURL = "http://localhost:5000"; // Local Environment
 export const BASEURL = "https://hackcast.onrender.com"; // Production Environment
