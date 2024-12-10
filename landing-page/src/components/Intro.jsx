@@ -46,7 +46,7 @@ const Intro = () => {
           </a>
         </div>
         <img
-          src="https://via.placeholder.com/500"
+          src="/public/App.png"
           alt="AI transforming news into audio"
           className="rounded-lg shadow-lg w-full md:w-1/2 max-w-lg mt-8 md:mt-0"
         />

@@ -1,7 +1,7 @@
-import { Box, Center } from "@chakra-ui/react";
-import PostCard from "./PostCard";
+import { Center } from "@chakra-ui/react";
 import Title from "./Title";
 import { ExpandableCard } from "./ui/ExpandableCard";
+import Footer from "./Footer";
 
 const PostList = ({ posts }) => {
   return (
@@ -10,6 +10,7 @@ const PostList = ({ posts }) => {
         <Title />
       </Center>
       <ExpandableCard cards={posts} />
+      <Footer />
     </>
   );
 };
