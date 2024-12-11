@@ -51,13 +51,6 @@ const Cards = () => {
           </p>
           <br />
           <br />
-          <p className="text-xl font-bold relative z-20 mt-2 text-white">
-            Instant Playback
-          </p>
-          <p className="text-neutral-300 mt-4 relative z-20 text-sm">
-            Access audio versions of your favorite articles instantly—no waiting
-            required!
-          </p>
         </CardSpotlight>
       </div>
     </>
