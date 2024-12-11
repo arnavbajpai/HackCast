@@ -14,7 +14,7 @@ export function LampDemo() {
           duration: 0.8,
           ease: "easeInOut",
         }}
-        className="mt-8 bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
+        className="mt-8 bg-gradient-to-br from-slate-100 to-slate-400 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
       >
         <h1>Hack Cast</h1>
       </motion.h1>
@@ -29,6 +29,15 @@ export function LampDemo() {
         className="bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-2xl tracking-tight text-transparent"
       >
         <h1>Your Daily Tech Digest, Now in Audio.</h1>
+        <br />
+        <a href="https://hackcast.co/" target="_blank">
+          <button class="relative inline-block px-8 py-4 font-semibold text-white transition-transform duration-300 ease-in-out bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 rounded-lg shadow-xl  hover:-translate-y-1 hover:shadow-2xl">
+            Listen Now!
+            <span class="absolute inset-0 rounded-lg opacity-75 animate-pulse bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 blur-xl"></span>
+          </button>
+        </a>
+        <br />
+        <br />
       </motion.p>
     </LampContainer>
   );
