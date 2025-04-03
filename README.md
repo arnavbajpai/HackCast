@@ -1,4 +1,4 @@
-# HackCast 🎧
+# HackCast 🎧 - By Ditch May
 
 Hacker news in audio format
 
@@ -40,3 +40,16 @@ Audio API
 - Inspired by Hacker News.
 - Chakra UI for the beautiful frontend components.
 - MongoDB GridFS for efficient file storage.
+
+---
+
+### About the Developer 🙃
+
+**Name**: DitchMay  
+**Philosophy**: Ghost plans, lift weights (but only scientifically).  
+**Fun fact**: Swears by science-based training, but arm-wrestles like a confused squirrel.  
+**Known for**: Missing every plan but pushing code at 2AM.  
+
+---
+
+Built with science, caffeine, and zero regard for your invitations. 
